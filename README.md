@@ -26,4 +26,5 @@ and situational trends that may support:
 - Phase-specific strategy development
 - Momentum analysis
 - Player profiling across multiple innings
+
 Strike rate and cumulative metrics are designed to be calculated externally across aggregated innings to support longitudinal analysis.
