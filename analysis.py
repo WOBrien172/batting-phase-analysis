@@ -65,8 +65,8 @@ if_out = str(input("Did they get out? (Y/N)").lower())
 while if_out not in ["y", "n"]:
     if_out = str(input("Did they get out? (Y/N)").lower())
 total_balls_faced = get_number("How long was total innings (balls)?", 0, 300)
-over_in = get_number("Which over (no.) did they come in?", 1, format)
-over_out = get_number("Which over (no.) did they face their last ball?", over_in, format)
+over_in = get_number("Which over (no.) did they come in?", 1, match_overs)
+over_out = get_number("Which over (no.) did they face their last ball?", over_in, match_overs)
 
 if match_overs == 20:
     early_powerplay = 3
@@ -101,7 +101,8 @@ else:
 
 for i in range((over_out-over_in+1)):
     ball_in_over = 0
-    over_string = input("Enter over string (use '/' if batter did not face ball), for example, (1/3//6). If player went in during over, signal with '/' for balls not faced by batter.")
+    over_string = input("Enter over string (use '/' if batter did not face ball), for example, (1/3//6). " \
+    "If player went in during over, signal with '/' for balls not faced by batter.")
     for char in over_string:
         ball_in_over = ball_in_over + 1
         if char == '/':     # Batter did not face this ball
@@ -153,6 +154,7 @@ for i in range((over_out-over_in+1)):
             ball_position[ball_in_over]["runs"] += event
             ball_position[ball_in_over]["balls"] += 1
             last_ball = event
+    print(f"End of over {over_in + i}")
 
 phase_ranges = [
     ("Early Powerplay", 1, early_powerplay),
@@ -160,7 +162,7 @@ phase_ranges = [
     ("Early Middle", late_powerplay + 1, early_middle),
     ("Middle Overs", early_middle + 1, middle_middle),
     ("Late Middle Overs", middle_middle + 1, late_middle),
-    ("Death Overs", late_middle + 1, format)
+    ("Death Overs", late_middle + 1, match_overs)
 ]
 
 phase_keys = [
@@ -207,7 +209,7 @@ print(f"After dot streaks (3+ dot balls): {dot_streak_runs} off {dot_streak_ball
 print("---STATS FOR COPY/PASTE INTO SHEETS---")
 
 print("Scoring breakdown:\t" + "\t".join(
-    map(str, [scoring_values[k] for k in [0,1,2,3,4,6]])))
+    map(str, [scoring_values[k] for k in [0,1,2,3]])))
 
 for key in [0,1,2,3,4,6]:
     afterevent_output_list.append(after_event[key]["runs"])
