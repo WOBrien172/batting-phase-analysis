@@ -1,3 +1,14 @@
+"""
+Cricket Batting Trend Analysis Tool
+
+Purpose:
+Processes ball-by-ball batting input and generates advanced phase,
+sequence, and situational performance metrics.
+
+Author: Woody O'Brien
+Date: Feb-Mar 2026
+"""
+
 balls_faced = 0
 total_score = 0
 dot_streak = 0
@@ -208,36 +219,57 @@ print(f"After dot streaks (3+ dot balls): {dot_streak_runs} off {dot_streak_ball
 
 print("---STATS FOR COPY/PASTE INTO SHEETS---")
 
-print("Scoring Breakdown:," + ",".join(map(str,[scoring_values[k] for k in [0,1,2,3]])))
+All_Stats = []
+
+Scoring_Breakdown = ",".join(map(str,[scoring_values[k] for k in [0,1,2,3]]))
+
+All_Stats.append(Scoring_Breakdown)
 
 for key in [0,1,2,3,4,6]:
     afterevent_output_list.append(after_event[key]["runs"])
     afterevent_output_list.append(after_event[key]["balls"])
     afterevent_output_list.append(after_event[key]["boundaries"])
-print("Leading from balls:," + ",".join(map(str, afterevent_output_list)))
 
-print("Runs per 6 ball segment:," + ",".join(map(str,six_ball_segments)))
+Leading_from_balls = ",".join(map(str, afterevent_output_list))
 
-before_dismissal = [last_three_balls_score, final_ball]
+All_Stats.append(Leading_from_balls)
 
 if if_out == "y":
-    print("Before dismissal stats:," + ",".join(map(str, before_dismissal)))
+    before_dismissal = [last_three_balls_score, final_ball]
+    Before_dismissal_stats = ",".join(map(str, before_dismissal))
+else:
+    Before_dismissal_stats = " , "
+
+All_Stats.append(Before_dismissal_stats)
 
 for key in ["early_powerplay","late_powerplay","early_middle","middle_middle","late_middle","death"]:
     phases_output_list.append(phases[key]["runs"])
     phases_output_list.append(phases[key]["balls"])
     phases_output_list.append(phases[key]["boundaries"])
-print("Match Stage Breakdown:," + ",".join(map(str,phases_output_list)))
+
+Match_Stage_Breakdown = ",".join(map(str,phases_output_list))
+
+All_Stats.append(Match_Stage_Breakdown)
 
 for pos in range(1,7):
     ballno_output_list.append(ball_position[pos]["runs"])
     ballno_output_list.append(ball_position[pos]["balls"])
     ballno_output_list.append(ball_position[pos]["boundaries"])
 
-print("Ball in over breakdown:," + ",".join(map(str,ballno_output_list)))   
+Ball_in_over_breakdown = ",".join(map(str,ballno_output_list))
 
-print(f"Boundary Balls: {boundary_balls}")
+All_Stats.append(Ball_in_over_breakdown)
 
 dot_stats = [dot_streak_runs, dot_streak_balls]
 
-print("After dot streaks:," + ",".join(map(str, dot_stats)))
+After_dot_streaks = ",".join(map(str, dot_stats))
+
+All_Stats.append(After_dot_streaks)
+
+Runs_per_6_ball_segment = ",".join(map(str,six_ball_segments))
+
+All_Stats.append(Runs_per_6_ball_segment)
+
+All_Stats = ",".join(map(str,All_Stats))
+
+print(All_Stats)
