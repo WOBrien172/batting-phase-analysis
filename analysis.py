@@ -15,28 +15,28 @@ labels = {
     6: "sixes"
 }
 after_event = {
-    0: {"runs":0, "balls":0},
-    1: {"runs":0, "balls":0},
-    2: {"runs":0, "balls":0},
-    3: {"runs":0, "balls":0},
-    4: {"runs":0, "balls":0},
-    6: {"runs":0, "balls":0}
+    0: {"runs":0, "balls":0, "boundaries":0},
+    1: {"runs":0, "balls":0, "boundaries":0},
+    2: {"runs":0, "balls":0, "boundaries":0},
+    3: {"runs":0, "balls":0, "boundaries":0},
+    4: {"runs":0, "balls":0, "boundaries":0},
+    6: {"runs":0, "balls":0, "boundaries":0}
 }
 ball_position = {
-    1: {"runs":0, "balls":0},
-    2: {"runs":0, "balls":0},
-    3: {"runs":0, "balls":0},
-    4: {"runs":0, "balls":0},
-    5: {"runs":0, "balls":0},
-    6: {"runs":0, "balls":0}
+    1: {"runs":0, "balls":0, "boundaries":0},
+    2: {"runs":0, "balls":0, "boundaries":0},
+    3: {"runs":0, "balls":0, "boundaries":0},
+    4: {"runs":0, "balls":0, "boundaries":0},
+    5: {"runs":0, "balls":0, "boundaries":0},
+    6: {"runs":0, "balls":0, "boundaries":0}
 }
 phases = {
-    "early_powerplay": {"runs":0, "balls":0},
-    "late_powerplay": {"runs":0, "balls":0},
-    "early_middle": {"runs":0, "balls":0},
-    "middle_middle": {"runs":0, "balls":0},
-    "late_middle": {"runs":0, "balls":0},
-    "death": {"runs":0, "balls":0}
+    "early_powerplay": {"runs":0, "balls":0, "boundaries":0},
+    "late_powerplay": {"runs":0, "balls":0, "boundaries":0},
+    "early_middle": {"runs":0, "balls":0, "boundaries":0},
+    "middle_middle": {"runs":0, "balls":0, "boundaries":0},
+    "late_middle": {"runs":0, "balls": 0, "boundaries":0},
+    "death": {"runs":0, "balls":0, "boundaries":0}
 }
 final_ball = 0
 last_three_balls_score = 0
@@ -102,7 +102,8 @@ else:
 for i in range((over_out-over_in+1)):
     ball_in_over = 0
     over_string = input("Enter over string (use '/' if batter did not face ball), for example, (1/3//6). " \
-    "If player went in during over, signal with '/' for balls not faced by batter.")
+    "If player went in during over, signal with '/' for balls not faced by batter." \
+    "Use '0' for wicket ball.")
     for char in over_string:
         ball_in_over = ball_in_over + 1
         if char == '/':     # Batter did not face this ball
@@ -131,9 +132,13 @@ for i in range((over_out-over_in+1)):
                 phase = "death"
             phases[phase]["runs"] += event
             phases[phase]["balls"] += 1
+            if event >= 4:
+                phases[phase]["boundaries"] += 1
             if last_ball != None:
                 after_event[last_ball]["runs"] += event
                 after_event[last_ball]["balls"] += 1
+                if event >= 4:
+                    after_event[last_ball]["boundaries"] += 1
             scoring_values[event] += 1
             if event in [4,6]:
                 boundary_balls.append(balls_faced)
@@ -153,6 +158,8 @@ for i in range((over_out-over_in+1)):
                     final_ball = event
             ball_position[ball_in_over]["runs"] += event
             ball_position[ball_in_over]["balls"] += 1
+            if event >= 4:
+                ball_position[ball_in_over]["boundaries"] += 1
             last_ball = event
     print(f"End of over {over_in + i}")
 
@@ -190,51 +197,60 @@ if if_out == "y":
 for key in after_event:
     runs = after_event[key]["runs"]
     balls = after_event[key]["balls"]
-    print(f"Ball after {labels[key]}: {runs} off {balls}")
+    boundaries = after_event[key]["boundaries"]
+
+    print(f"Ball after {labels[key]}: {runs} off {balls} with {boundaries} boundaries.")
+
 for i in range(len(phase_keys)):
     name, start, end = phase_ranges[i]
     key = phase_keys[i]
     
     runs = phases[key]["runs"]
     balls = phases[key]["balls"]
+    boundaries = phases[key]["boundaries"]
     
-    print(f"{name} (overs {start}-{end}): {runs} off {balls}")
+    print(f"{name} (overs {start}-{end}): {runs} off {balls} with {boundaries} boundaries.")
+
 for i in range(1, 7):
     runs = ball_position[i]["runs"]
     balls = ball_position[i]["balls"]
-    print(f"Ball {i} in Over: {runs} off {balls}")
+    boundaries = ball_position[i]["boundaries"]
+    print(f"Ball {i} in Over: {runs} off {balls} with {boundaries} boundaries")
 
 print(f"After dot streaks (3+ dot balls): {dot_streak_runs} off {dot_streak_balls}")
 
 print("---STATS FOR COPY/PASTE INTO SHEETS---")
 
-print("Scoring breakdown:\t" + "\t".join(
-    map(str, [scoring_values[k] for k in [0,1,2,3]])))
+print("Scoring Breakdown:\t" + "\t".join(map(str,[scoring_values[k] for k in [0,1,2,3]])))
 
 for key in [0,1,2,3,4,6]:
     afterevent_output_list.append(after_event[key]["runs"])
     afterevent_output_list.append(after_event[key]["balls"])
-
+    afterevent_output_list.append(after_event[key]["boundaries"])
 print("Leading from balls:\t" + "\t".join(map(str, afterevent_output_list)))
 
-print("Runs per 6 ball segments:\t" + "\t".join(map(str, six_ball_segments)))
+print("Runs per 6 ball segment:\t" + "\t".join(map(str,six_ball_segments)))
 
-print("Before dismissal stats:\t" + "\t".join(
-    map(str, [last_three_balls_score, final_ball])
-))
+before_dismissal = [last_three_balls_score, final_ball]
 
-for phase in phase_keys:
-    phases_output_list.append(phases[phase]["runs"])
-    phases_output_list.append(phases[phase]["balls"])
+if if_out == "y":
+    print("Before dismissal stats:\t" + "\t".join(map(str, before_dismissal)))
 
-print("Match Stage Breakdown:\t" + "\t".join(map(str, phases_output_list)))
+for key in ["early_powerplay","late_powerplay","early_middle","middle_middle","late_middle","death"]:
+    phases_output_list.append(phases[key]["runs"])
+    phases_output_list.append(phases[key]["balls"])
+    phases_output_list.append(phases[key]["boundaries"])
+print("Match Stage Breakdown:\t" + "\t".join(map(str,phases_output_list)))
 
-for pos in ball_position:
+for pos in range(1,7):
     ballno_output_list.append(ball_position[pos]["runs"])
     ballno_output_list.append(ball_position[pos]["balls"])
+    ballno_output_list.append(ball_position[pos]["boundaries"])
 
-print("Ball in Over Breakdown:\t" + "\t".join(map(str, ballno_output_list)))
+print("Ball in over breakdown:\t" + "\t".join(map(str,ballno_output_list)))   
 
 print(f"Boundary Balls: {boundary_balls}")
 
-print("After dot streaks:\t" + "\t".join(map(str, [dot_streak_runs, dot_streak_balls])))
+dot_stats = [dot_streak_runs, dot_streak_balls]
+
+print("After dot streaks:\t" + "\t".join(map(str, dot_stats)))
