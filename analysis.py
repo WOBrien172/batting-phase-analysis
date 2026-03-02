@@ -74,18 +74,36 @@ if match_overs == 20:
     early_middle = 9
     middle_middle = 13
     late_middle = 16
-elif match_overs == 30:
+if match_overs == 25:
     early_powerplay = 4
     late_powerplay = 7
+    early_middle = 11
+    middle_middle = 16
+    late_middle = 20
+elif match_overs == 30:
+    early_powerplay = 4
+    late_powerplay = 8
     early_middle = 12
     middle_middle = 18
-    late_middle = 25
+    late_middle = 24
+elif match_overs == 35:
+    early_powerplay = 4
+    late_powerplay = 8
+    early_middle = 15
+    middle_middle = 23
+    late_middle = 28
 elif match_overs == 40:
     early_powerplay = 4
     late_powerplay = 8
     early_middle = 15
     middle_middle = 23
     late_middle = 32
+elif match_overs == 45:
+    early_powerplay = 4
+    late_powerplay = 9
+    early_middle = 18
+    middle_middle = 30
+    late_middle = 37
 elif match_overs == 50:
     early_powerplay = 5
     late_powerplay = 10
@@ -247,7 +265,7 @@ for pos in range(1,7):
     ballno_output_list.append(ball_position[pos]["balls"])
     ballno_output_list.append(ball_position[pos]["boundaries"])
 
-print("Ball in over breakdown:\t" + "\t".join(map(str,ballno_output_list)))   
+print("Ball in over breakdown:," + ",".join(map(str,ballno_output_list)))   
 
 print(f"Boundary Balls: {boundary_balls}")
 
