@@ -239,26 +239,26 @@ print(f"After dot streaks (3+ dot balls): {dot_streak_runs} off {dot_streak_ball
 
 print("---STATS FOR COPY/PASTE INTO SHEETS---")
 
-print("Scoring Breakdown:\t" + "\t".join(map(str,[scoring_values[k] for k in [0,1,2,3]])))
+print("Scoring Breakdown:," + ",".join(map(str,[scoring_values[k] for k in [0,1,2,3]])))
 
 for key in [0,1,2,3,4,6]:
     afterevent_output_list.append(after_event[key]["runs"])
     afterevent_output_list.append(after_event[key]["balls"])
     afterevent_output_list.append(after_event[key]["boundaries"])
-print("Leading from balls:\t" + "\t".join(map(str, afterevent_output_list)))
+print("Leading from balls:," + ",".join(map(str, afterevent_output_list)))
 
-print("Runs per 6 ball segment:\t" + "\t".join(map(str,six_ball_segments)))
+print("Runs per 6 ball segment:," + ",".join(map(str,six_ball_segments)))
 
 before_dismissal = [last_three_balls_score, final_ball]
 
 if if_out == "y":
-    print("Before dismissal stats:\t" + "\t".join(map(str, before_dismissal)))
+    print("Before dismissal stats:," + ",".join(map(str, before_dismissal)))
 
 for key in ["early_powerplay","late_powerplay","early_middle","middle_middle","late_middle","death"]:
     phases_output_list.append(phases[key]["runs"])
     phases_output_list.append(phases[key]["balls"])
     phases_output_list.append(phases[key]["boundaries"])
-print("Match Stage Breakdown:\t" + "\t".join(map(str,phases_output_list)))
+print("Match Stage Breakdown:," + ",".join(map(str,phases_output_list)))
 
 for pos in range(1,7):
     ballno_output_list.append(ball_position[pos]["runs"])
@@ -271,4 +271,4 @@ print(f"Boundary Balls: {boundary_balls}")
 
 dot_stats = [dot_streak_runs, dot_streak_balls]
 
-print("After dot streaks:\t" + "\t".join(map(str, dot_stats)))
+print("After dot streaks:," + ",".join(map(str, dot_stats)))
