@@ -59,63 +59,32 @@ def get_number(prompt, minimum, maximum):
             continue
 
         return variable
+    
+def get_phases(x):
+    if x == 20:
+        return 3, 6, 9, 13, 16
+    elif x == 25:
+        return 4, 7, 11, 16, 20
+    elif x == 30:
+        return 4, 8, 12, 18, 24
+    elif x == 35:
+        return 4, 8, 15, 22, 28
+    elif x == 40:
+        return 4, 8, 17, 26, 34
+    elif x == 45:
+        return 4, 9, 18, 30, 37
+    elif x == 50:
+        return 5, 10, 20, 30, 40
+    
 
 match_overs = get_number("How many overs per innings per side?", 20, 50)
+early_powerplay, late_powerplay, early_middle, middle_middle, late_middle = get_phases(match_overs)
 if_out = str(input("Did they get out? (Y/N)").lower())
 while if_out not in ["y", "n"]:
     if_out = str(input("Did they get out? (Y/N)").lower())
 total_balls_faced = get_number("How long was total innings (balls)?", 0, 300)
 over_in = get_number("Which over (no.) did they come in?", 1, match_overs)
 over_out = get_number("Which over (no.) did they face their last ball?", over_in, match_overs)
-
-if match_overs == 20:
-    early_powerplay = 3
-    late_powerplay = 6
-    early_middle = 9
-    middle_middle = 13
-    late_middle = 16
-if match_overs == 25:
-    early_powerplay = 4
-    late_powerplay = 7
-    early_middle = 11
-    middle_middle = 16
-    late_middle = 20
-elif match_overs == 30:
-    early_powerplay = 4
-    late_powerplay = 8
-    early_middle = 12
-    middle_middle = 18
-    late_middle = 24
-elif match_overs == 35:
-    early_powerplay = 4
-    late_powerplay = 8
-    early_middle = 15
-    middle_middle = 23
-    late_middle = 28
-elif match_overs == 40:
-    early_powerplay = 4
-    late_powerplay = 8
-    early_middle = 15
-    middle_middle = 23
-    late_middle = 32
-elif match_overs == 45:
-    early_powerplay = 4
-    late_powerplay = 9
-    early_middle = 18
-    middle_middle = 30
-    late_middle = 37
-elif match_overs == 50:
-    early_powerplay = 5
-    late_powerplay = 10
-    early_middle = 20
-    middle_middle = 30
-    late_middle = 40
-else:
-    early_powerplay = match_overs // 6
-    late_powerplay = match_overs // 3
-    early_middle = match_overs // 2
-    middle_middle = 2*match_overs // 3
-    late_middle = match_overs - early_powerplay
 
 for i in range((over_out-over_in+1)):
     ball_in_over = 0
